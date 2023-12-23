@@ -57,9 +57,6 @@ class Cell:
         """
         self._is_alive = self._tmp_is_alive
 
-
-        
-
     @property
     def is_alive(self):
         return self._is_alive
