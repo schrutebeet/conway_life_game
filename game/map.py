@@ -1,9 +1,11 @@
 from game.cell import Cell
-from typing import List
+from typing import List, Union
+
+import numpy as np
 
 
 class Map:
-    def __init__(self, dimensions: tuple = (10, 10), alive_cells: List[tuple]=[()]) -> None:
+    def __init__(self, dimensions: tuple = (10, 10), alive_cells: List[tuple]=[()], n_turns: Union[int, np.inf]=np.inf) -> None:
         self.dimensions = dimensions
         self.alive_cells = alive_cells
 
@@ -26,6 +28,7 @@ class Map:
                 cell_i_j = getattr(self, f"cell_{x}_{y}")
                 self._match_neighbouring_cells(cell_i_j)
 
+    def play_turn(self):
         # Change temporary status
         for x in range(self.dimensions[0]):
             for y in range(self.dimensions[1]):
@@ -38,12 +41,12 @@ class Map:
                 cell_i_j = getattr(self, f"cell_{x}_{y}")
                 cell_i_j._Cell__change_status()
 
-
         for x in range(self.dimensions[0]):
             for y in range(self.dimensions[1]):
                 cell_i_j = getattr(self, f"cell_{x}_{y}")
                 if cell_i_j.is_alive:
                     print(cell_i_j)
+        print("\n")
 
 
     def _create_dead_cell_i_j(self, x, y, is_alive: bool=False) -> None:
@@ -70,5 +73,3 @@ class Map:
                 cell_i_j.neighbors[position] = getattr(self, f"cell_{pos_x}_{pos_y}")
             except AttributeError:  # For when there is no neighbouring cell
                 cell_i_j.neighbors[position] = None
-
-Map(alive_cells=[(0, 0), (0, 1), (0, 2), (1, 0)]).initialize()
