@@ -34,7 +34,7 @@ class Cell:
             neighbor_x, neighbor_y = self._x + dx, self._y + dy
             neighbors[position] = (neighbor_x, neighbor_y)
         return neighbors
-    
+
     def check_alive_neighbours(self):
         """Count the number of neighboring cells alive.
 
@@ -43,14 +43,13 @@ class Cell:
         """
         count = 0
         for position, _ in self.neighbors.items():
-            if self.neighbors[position]is not None:
+            if self.neighbors[position] is not None:
                 if self.neighbors[position].is_alive:
                     count += 1
         return count
-    
+
     def __change_tmp_status(self) -> None:
-        """Change temporary status of the cell depending on the number of neighboring cells alive.
-        """
+        """Change temporary status of the cell depending on the number of neighboring cells alive."""
         count_neighbours_alive = self.check_alive_neighbours()
         if self._is_alive:
             if count_neighbours_alive in self.CONDITION_TO_KEEP_ALIVE:
@@ -64,8 +63,7 @@ class Cell:
                 self._tmp_is_alive = False
 
     def __change_status(self) -> None:
-        """Cast temporary status on real status.
-        """
+        """Cast temporary status on real status."""
         self._is_alive = self._tmp_is_alive
 
     @property

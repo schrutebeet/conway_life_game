@@ -11,5 +11,5 @@ def main():
     game_map.play_turn()
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()

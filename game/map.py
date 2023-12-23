@@ -7,20 +7,24 @@ from game.cell import Cell
 
 
 class Map:
-    def __init__(self, dimensions: tuple = (100, 100), alive_cells: List[tuple]=[()], n_turns: Union[int, np.inf]=np.inf) -> None:
+    def __init__(
+        self,
+        dimensions: tuple = (100, 100),
+        alive_cells: List[tuple] = [()],
+        n_turns: Union[int, np.inf] = np.inf,
+    ) -> None:
         self.dimensions = dimensions
         self.alive_cells = alive_cells
 
     def initialize(self):
-        """Initialize the map class with orders. Create these orders through several for loops.
-        """
+        """Initialize the map class with orders. Create these orders through several for loops."""
         # Initialize all cells
         for x in range(self.dimensions[0]):
             for y in range(self.dimensions[1]):
                 self._create_dead_cell_i_j(x, y, is_alive=False)
 
         # Come to life all those first cells determined by the user
-        for (pos_x, pos_y) in self.alive_cells:
+        for pos_x, pos_y in self.alive_cells:
             cell_i_j = getattr(self, f"cell_{pos_x}_{pos_y}")
             self._revive_cell(cell_i_j)
 
@@ -51,7 +55,7 @@ class Map:
         time.sleep(2)
         print("\n")
 
-    def _create_dead_cell_i_j(self, x, y, is_alive: bool=False) -> None:
+    def _create_dead_cell_i_j(self, x, y, is_alive: bool = False) -> None:
         """Create a dynamic cell based on the position of the loops. Store it as an attribute.
 
         Args:
