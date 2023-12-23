@@ -13,8 +13,22 @@ class Map:
         alive_cells: List[tuple] = [()],
         n_turns: Union[int, np.inf] = np.inf,
     ) -> None:
-        self.dimensions = dimensions
+        self._dimensions = dimensions
+        self._dimension_x = self._dimensions[0]
+        self._dimension_y = self._dimensions[1]
         self.alive_cells = alive_cells
+
+    @property
+    def dimensions(self):
+        return self._dimensions
+
+    @property
+    def dimension_x(self):
+        return self._dimension_x
+    
+    @property
+    def dimension_y(self):
+        return self._dimension_y
 
     def initialize(self):
         """Initialize the map class with orders. Create these orders through several for loops."""
@@ -34,7 +48,8 @@ class Map:
                 cell_i_j = getattr(self, f"cell_{x}_{y}")
                 self._match_neighbouring_cells(cell_i_j)
 
-    def play_turn(self):
+    def play_turn(self) -> List[Cell]:
+        list_of_cells_alive = []
         # Change temporary status
         for x in range(self.dimensions[0]):
             for y in range(self.dimensions[1]):
@@ -51,9 +66,8 @@ class Map:
             for y in range(self.dimensions[1]):
                 cell_i_j = getattr(self, f"cell_{x}_{y}")
                 if cell_i_j.is_alive:
-                    print(cell_i_j)
-        time.sleep(2)
-        print("\n")
+                    list_of_cells_alive.append(cell_i_j)
+        return list_of_cells_alive
 
     def _create_dead_cell_i_j(self, x, y, is_alive: bool = False) -> None:
         """Create a dynamic cell based on the position of the loops. Store it as an attribute.
