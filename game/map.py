@@ -1,11 +1,11 @@
 from game.cell import Cell
 from typing import List, Union
+import time
 
 import numpy as np
 
-
 class Map:
-    def __init__(self, dimensions: tuple = (10, 10), alive_cells: List[tuple]=[()], n_turns: Union[int, np.inf]=np.inf) -> None:
+    def __init__(self, dimensions: tuple = (100, 100), alive_cells: List[tuple]=[()], n_turns: Union[int, np.inf]=np.inf) -> None:
         self.dimensions = dimensions
         self.alive_cells = alive_cells
 
@@ -46,8 +46,8 @@ class Map:
                 cell_i_j = getattr(self, f"cell_{x}_{y}")
                 if cell_i_j.is_alive:
                     print(cell_i_j)
+        time.sleep(2)
         print("\n")
-
 
     def _create_dead_cell_i_j(self, x, y, is_alive: bool=False) -> None:
         """Create a dynamic cell based on the position of the loops. Store it as an attribute.
