@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "conway-life-game"
+version = "0.0.1"
+description = ""
+authors = ["Ricardo Sans <ricardosans98@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.13.2"
+black = "^23.12.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
