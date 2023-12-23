@@ -15,6 +15,7 @@ class Cell:
         self._x = self.position[0]
         self._y = self.position[1]
         self._is_alive = False
+        self._tmp_is_alive = False
         self._relative_directions = self.RELATIVE_DIRECTIONS
         self._pos_neighbors = self._calculate_neighbors()
         self.neighbors = {}
@@ -29,6 +30,35 @@ class Cell:
             neighbor_x, neighbor_y = self._x + dx, self._y + dy
             neighbors[position] = (neighbor_x, neighbor_y)
         return neighbors
+    
+    def check_alive_neighbours(self):
+        """Count the number of neighboring cells alive.
+
+        Returns:
+            int: Number of surrounding cells alive. Maximum 8 cells.
+        """
+        count = 0
+        for position, (pos_x, pos_y) in self.neighbors.items():
+            if self.neighbors[position].is_alive:
+                count += 1
+        return count
+    
+    def __change_tmp_status(self) -> None:
+        """Change temporary status of the cell depending on the number of neighboring cells alive.
+        """
+        neighbours_alive = self.check_alive_neighbours()
+        if neighbours_alive >= 3:
+            self._tmp_is_alive = True
+        else:
+            self._tmp_is_alive = False
+
+    def __change_status(self) -> None:
+        """Cast temporary status on real status.
+        """
+        self._is_alive = self._tmp_is_alive
+
+
+        
 
     @property
     def is_alive(self):
