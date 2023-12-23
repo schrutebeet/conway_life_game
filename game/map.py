@@ -1,20 +1,52 @@
 from game.cell import Cell
+from typing import List
 
 
 class Map:
-    def __init__(self, dimensions: tuple = (10, 10)) -> None:
+    def __init__(self, dimensions: tuple = (10, 10), alive_cells: List[tuple]=[()]) -> None:
         self.dimensions = dimensions
+        self.alive_cells = alive_cells
 
     def initialize(self):
         """Initialize the map class with orders. Create these orders through several for loops.
         """
-        for x in range(1, self.dimensions[0] + 1):
-            for y in range(1, self.dimensions[1] + 1):
-                self._create_cell_i_j(x, y)
+        # Initialize all cells
+        for x in range(self.dimensions[0]):
+            for y in range(self.dimensions[1]):
+                self._create_dead_cell_i_j(x, y, is_alive=False)
+
+        # Come to life all those first cells determined by the user
+        for (pos_x, pos_y) in self.alive_cells:
+            cell_i_j = getattr(self, f"cell_{pos_x}_{pos_y}")
+            self._revive_cell(cell_i_j)
+
+        # Match cells with neighbouring cells
+        for x in range(self.dimensions[0]):
+            for y in range(self.dimensions[1]):
                 cell_i_j = getattr(self, f"cell_{x}_{y}")
                 self._match_neighbouring_cells(cell_i_j)
 
-    def _create_cell_i_j(self, x, y) -> None:
+        # Change temporary status
+        for x in range(self.dimensions[0]):
+            for y in range(self.dimensions[1]):
+                cell_i_j = getattr(self, f"cell_{x}_{y}")
+                cell_i_j._Cell__change_tmp_status()
+
+        # Change real status
+        for x in range(self.dimensions[0]):
+            for y in range(self.dimensions[1]):
+                cell_i_j = getattr(self, f"cell_{x}_{y}")
+                cell_i_j._Cell__change_status()
+
+
+        for x in range(self.dimensions[0]):
+            for y in range(self.dimensions[1]):
+                cell_i_j = getattr(self, f"cell_{x}_{y}")
+                if cell_i_j.is_alive:
+                    print(cell_i_j)
+
+
+    def _create_dead_cell_i_j(self, x, y, is_alive: bool=False) -> None:
         """Create a dynamic cell based on the position of the loops. Store it as an attribute.
 
         Args:
@@ -22,6 +54,9 @@ class Map:
             y (int): Value of the second element in the position vector (y-axis).
         """
         setattr(self, f"cell_{x}_{y}", Cell((x, y)))
+
+    def _revive_cell(self, cell_i_j: Cell) -> None:
+        cell_i_j._is_alive = True
 
     def _match_neighbouring_cells(self, cell_i_j):
         """Add neighboring cells to target cell. E.g., for cell in position (0, 0), add as neighbors
@@ -36,4 +71,4 @@ class Map:
             except AttributeError:  # For when there is no neighbouring cell
                 cell_i_j.neighbors[position] = None
 
-Map().initialize()
+Map(alive_cells=[(0, 0), (0, 1), (0, 2), (1, 0)]).initialize()
