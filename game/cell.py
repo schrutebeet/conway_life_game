@@ -10,6 +10,10 @@ class Cell:
         "top_right": (1, 1),
     }
 
+    CONDITION_TO_KEEP_ALIVE = [2, 3]
+
+    CONDITION_TO_REVIVE = [3]
+
     def __init__(self, position: tuple = (0, 0)) -> None:
         self.position = position
         self._x = self.position[0]
@@ -38,19 +42,26 @@ class Cell:
             int: Number of surrounding cells alive. Maximum 8 cells.
         """
         count = 0
-        for position, (pos_x, pos_y) in self.neighbors.items():
-            if self.neighbors[position].is_alive:
-                count += 1
+        for position, _ in self.neighbors.items():
+            if self.neighbors[position]is not None:
+                if self.neighbors[position].is_alive:
+                    count += 1
         return count
     
     def __change_tmp_status(self) -> None:
         """Change temporary status of the cell depending on the number of neighboring cells alive.
         """
-        neighbours_alive = self.check_alive_neighbours()
-        if neighbours_alive >= 3:
-            self._tmp_is_alive = True
+        count_neighbours_alive = self.check_alive_neighbours()
+        if self._is_alive:
+            if count_neighbours_alive in self.CONDITION_TO_KEEP_ALIVE:
+                self._tmp_is_alive = True
+            else:
+                self._tmp_is_alive = False
         else:
-            self._tmp_is_alive = False
+            if count_neighbours_alive in self.CONDITION_TO_REVIVE:
+                self._tmp_is_alive = True
+            else:
+                self._tmp_is_alive = False
 
     def __change_status(self) -> None:
         """Cast temporary status on real status.
