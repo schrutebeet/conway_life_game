@@ -1,8 +1,10 @@
-from game.cell import Cell
-from typing import List, Union
 import time
+from typing import List, Union
 
 import numpy as np
+
+from game.cell import Cell
+
 
 class Map:
     def __init__(self, dimensions: tuple = (100, 100), alive_cells: List[tuple]=[()], n_turns: Union[int, np.inf]=np.inf) -> None:
